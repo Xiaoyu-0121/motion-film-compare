@@ -59,84 +59,84 @@
     <div class="row">
       <button id="play" type="button">四条一起播放</button>
       <button id="pause" type="button">暂停</button>
-      <span class="hint">左上 Opus high，右上 Opus low，左下 DeepSeek high，右下 DeepSeek low</span>
-      <a class="hint" href="#report">耗时分析</a>
+      <span class="hint">左上 Opus 高思考，右上 Opus 低思考，左下 DeepSeek 高思考，右下 DeepSeek 低思考</span>
+      <a class="hint" href="#report">花了多久</a>
     </div>
   </header>
   <main>
     <div class="grid" id="grid"></div>
     <section class="report" id="report">
-      <h2>耗时分析</h2>
-      <p>五条相同 brief。Opus 是 code-motion-opus55-1008（high）和 code-motion-opus55-low。DeepSeek 是 code-motion-ds41-flash-high 和 code-motion-ds41-flash-low，模型都是 deepseek.v4.1.flash。Dev，2026-10-19。</p>
+      <h2>花了多久</h2>
+      <p>五条片子用的是同一份题目。Opus 开了高思考和低思考各做一遍。DeepSeek 也是同一套做法，模型是 deepseek.v4.1.flash，同样开了高思考和低思考。测试环境，2026-10-19。</p>
       <div class="note">
-        <strong>DeepSeek 十条都交了片，中间供应商断过一次</strong>
-        大约 17:18–17:23，deepseek.v4.1.flash 返回 503 provider_unavailable。当时片子都还在做。17:27 各补了一条「继续并交片」。下面的 DeepSeek 墙钟已经扣掉这次空等（大约 5–11 分钟）。Wayfarer low 是自己停下来发了选择题，空等没有从它的数字里扣掉。
+        <strong>DeepSeek 十条都交了片，中间服务断过一次</strong>
+        大约下午 5:18 到 5:23，DeepSeek 暂时连不上，片子当时都还没做完。5:27 各补了一句「接着做完，把片子交出来」。下面 DeepSeek「一共多久」已经去掉这次干等，大概 5 到 11 分钟。Wayfarer 的低思考是自己停下来问要不要继续，那段等人的时间还算在它里面。
       </div>
       <div class="stats">
-        <div class="stat"><b>76 分钟</b><span>Opus high 平均墙钟</span></div>
-        <div class="stat"><b>14 分钟</b><span>Opus low 平均墙钟</span></div>
-        <div class="stat"><b>48 分钟</b><span>DeepSeek high 平均有效墙钟</span></div>
-        <div class="stat"><b>36 分钟</b><span>DeepSeek low 平均有效墙钟</span></div>
+        <div class="stat"><b>76 分钟</b><span>Opus 高思考，平均从开工到交片</span></div>
+        <div class="stat"><b>14 分钟</b><span>Opus 低思考，平均从开工到交片</span></div>
+        <div class="stat"><b>48 分钟</b><span>DeepSeek 高思考，平均从开工到交片</span></div>
+        <div class="stat"><b>36 分钟</b><span>DeepSeek 低思考，平均从开工到交片</span></div>
       </div>
       <div class="stats">
-        <div class="stat"><b>62 分钟</b><span>Opus high 平均请求在飞</span></div>
-        <div class="stat"><b>9 分钟</b><span>Opus low 平均请求在飞</span></div>
-        <div class="stat"><b>19 分钟</b><span>DeepSeek high 平均请求在飞</span></div>
-        <div class="stat"><b>17 分钟</b><span>DeepSeek low 平均请求在飞</span></div>
+        <div class="stat"><b>62 分钟</b><span>Opus 高思考，模型回答一共多久</span></div>
+        <div class="stat"><b>9 分钟</b><span>Opus 低思考，模型回答一共多久</span></div>
+        <div class="stat"><b>19 分钟</b><span>DeepSeek 高思考，模型回答一共多久</span></div>
+        <div class="stat"><b>17 分钟</b><span>DeepSeek 低思考，模型回答一共多久</span></div>
       </div>
 
-      <h2>有效墙钟</h2>
-      <p class="muted">单位：分钟。Opus 从创建到交片。DeepSeek 用同一段再减去 503 之后、补消息之前的空等。来源：dev 消息时间，2026-10-19。</p>
+      <h2>从开工到交片</h2>
+      <p class="muted">单位是分钟。从任务开始，到片子交出来。DeepSeek 去掉了断线之后、补那句话之前干等的时间。</p>
       <div class="legend">
-        <span><i class="swatch oh"></i>Opus high</span>
-        <span><i class="swatch ol"></i>Opus low</span>
-        <span><i class="swatch dh"></i>DeepSeek high</span>
-        <span><i class="swatch dl"></i>DeepSeek low</span>
+        <span><i class="swatch oh"></i>Opus 高思考</span>
+        <span><i class="swatch ol"></i>Opus 低思考</span>
+        <span><i class="swatch dh"></i>DeepSeek 高思考</span>
+        <span><i class="swatch dl"></i>DeepSeek 低思考</span>
       </div>
       <div class="chart" id="wall"></div>
 
-      <h2>请求发出到响应结束</h2>
-      <p class="muted">单位：分钟。Opus 用 manager 日志的 duration_ms 加总。DeepSeek 用消息间隔里、工具执行之外的那段，和 Opus 上次对过的口径相同。</p>
+      <h2>模型回答花了多久</h2>
+      <p class="muted">单位是分钟。每一次都是「问题发出去，到它这次答完」。中间它自己停下来想，也算在里面。跑命令、渲染的时间不算在这里。</p>
       <div class="chart" id="inflight"></div>
 
-      <h3>思考力度</h3>
-      <p>Opus high 的请求在飞时间大约是 low 的 6 倍，墙钟也跟着拉开。DeepSeek high 和 low 的请求在飞时间挨在一起，五条平均 19 分钟对 17 分钟。配置里的 model_thinking_effort 分别是 high 和 low，日志里仍然读不到这个字段。DeepSeek 这次没有复现 Opus 那种「high 会在同一次请求里多想几十分钟」。</p>
-      <p>DeepSeek 的墙钟差主要在工具。high 的几何级数、互联网史、可再生能源各有大约 35 分钟工具时间。low 的手环是例外：工具 56 分钟，其中 17:06–17:21 有一次 bash 一直没返回。</p>
+      <h3>高思考和低思考差在哪</h3>
+      <p>Opus 开高思考时，模型回答的时间大约是低思考的 6 倍，从开工到交片也跟着拉开。DeepSeek 开高思考和低思考差不多，五条平均 19 分钟对 17 分钟。两边都在配置里分别设了高思考和低思考。DeepSeek 这次没有出现 Opus 那种情况：开高思考，就会在一次回答里多想几十分钟。</p>
+      <p>DeepSeek 总时间的差别，主要在跑命令和渲染。高思考的几何级数、互联网史、可再生能源，各有大约 35 分钟在跑命令。低思考的手环是例外：跑命令 56 分钟，其中下午 5:06 到 5:21 有一条命令一直没返回。</p>
 
       <h2>逐条对照</h2>
-      <p class="muted">时长来自成片文件。分辨率都读过：DeepSeek 十条都是 1280×720。Opus 只有互联网史 high 是 1080p，其余也是 720p。表内墙钟、请求在飞、工具的单位是分钟。</p>
+      <p class="muted">成片时长和分辨率是从视频文件里读的。DeepSeek 十条都是 1280×720。Opus 只有互联网史的高思考是 1080p，其余也是 720p。表里前三列数字的单位是分钟。</p>
       <table>
         <thead>
-          <tr><th>片子</th><th>插件</th><th>有效墙钟</th><th>请求在飞</th><th>工具</th><th>成片</th></tr>
+          <tr><th>片子</th><th>哪一组</th><th>一共多久</th><th>模型回答</th><th>跑命令和渲染</th><th>成片</th></tr>
         </thead>
         <tbody>
-          <tr><td>AURA Ring</td><td>Opus high</td><td>70.1</td><td>53.4</td><td>15.4</td><td>24 秒</td></tr>
-          <tr class="band"><td>AURA Ring</td><td>Opus low</td><td>11.6</td><td>6.7</td><td>4.4</td><td>22 秒</td></tr>
-          <tr><td>AURA Ring</td><td>DeepSeek high</td><td>48.5</td><td>19.6</td><td>28.9</td><td>26 秒</td></tr>
-          <tr class="band"><td>AURA Ring</td><td>DeepSeek low</td><td>69.6</td><td>13.5</td><td>56.1</td><td>24 秒</td></tr>
-          <tr><td>几何级数</td><td>Opus high</td><td>74.5</td><td>58.1</td><td>15.2</td><td>54 秒</td></tr>
-          <tr class="band"><td>几何级数</td><td>Opus low</td><td>16.1</td><td>12.6</td><td>2.7</td><td>29 秒</td></tr>
-          <tr><td>几何级数</td><td>DeepSeek high</td><td>51.9</td><td>16.5</td><td>35.4</td><td>66 秒</td></tr>
-          <tr class="band"><td>几何级数</td><td>DeepSeek low</td><td>29.2</td><td>18.7</td><td>10.5</td><td>39 秒</td></tr>
-          <tr><td>Wayfarer</td><td>Opus high</td><td>87.7</td><td>69.1</td><td>4.3</td><td>24 秒</td></tr>
-          <tr class="band"><td>Wayfarer</td><td>Opus low</td><td>17.8</td><td>11.7</td><td>5.0</td><td>20 秒</td></tr>
-          <tr><td>Wayfarer</td><td>DeepSeek high</td><td>27.8</td><td>18.0</td><td>9.8</td><td>26 秒</td></tr>
-          <tr class="band"><td>Wayfarer</td><td>DeepSeek low</td><td>31.6</td><td>27.1</td><td>4.5</td><td>21 秒</td></tr>
-          <tr><td>互联网史</td><td>Opus high</td><td>75.8</td><td>65.5</td><td>8.9</td><td>56 秒 · 1080p</td></tr>
-          <tr class="band"><td>互联网史</td><td>Opus low</td><td>10.6</td><td>7.9</td><td>1.9</td><td>43 秒</td></tr>
-          <tr><td>互联网史</td><td>DeepSeek high</td><td>55.9</td><td>21.1</td><td>34.8</td><td>62 秒</td></tr>
-          <tr class="band"><td>互联网史</td><td>DeepSeek low</td><td>22.3</td><td>12.6</td><td>9.7</td><td>37 秒</td></tr>
-          <tr><td>可再生能源</td><td>Opus high</td><td>70.9</td><td>62.8</td><td>6.7</td><td>37 秒</td></tr>
-          <tr class="band"><td>可再生能源</td><td>Opus low</td><td>13.3</td><td>6.8</td><td>5.1</td><td>27 秒</td></tr>
-          <tr><td>可再生能源</td><td>DeepSeek high</td><td>57.6</td><td>21.3</td><td>36.3</td><td>42 秒</td></tr>
-          <tr class="band"><td>可再生能源</td><td>DeepSeek low</td><td>25.2</td><td>12.9</td><td>12.3</td><td>35 秒</td></tr>
+          <tr><td>AURA Ring</td><td>Opus 高思考</td><td>70.1</td><td>53.4</td><td>15.4</td><td>24 秒</td></tr>
+          <tr class="band"><td>AURA Ring</td><td>Opus 低思考</td><td>11.6</td><td>6.7</td><td>4.4</td><td>22 秒</td></tr>
+          <tr><td>AURA Ring</td><td>DeepSeek 高思考</td><td>48.5</td><td>19.6</td><td>28.9</td><td>26 秒</td></tr>
+          <tr class="band"><td>AURA Ring</td><td>DeepSeek 低思考</td><td>69.6</td><td>13.5</td><td>56.1</td><td>24 秒</td></tr>
+          <tr><td>几何级数</td><td>Opus 高思考</td><td>74.5</td><td>58.1</td><td>15.2</td><td>54 秒</td></tr>
+          <tr class="band"><td>几何级数</td><td>Opus 低思考</td><td>16.1</td><td>12.6</td><td>2.7</td><td>29 秒</td></tr>
+          <tr><td>几何级数</td><td>DeepSeek 高思考</td><td>51.9</td><td>16.5</td><td>35.4</td><td>66 秒</td></tr>
+          <tr class="band"><td>几何级数</td><td>DeepSeek 低思考</td><td>29.2</td><td>18.7</td><td>10.5</td><td>39 秒</td></tr>
+          <tr><td>Wayfarer</td><td>Opus 高思考</td><td>87.7</td><td>69.1</td><td>4.3</td><td>24 秒</td></tr>
+          <tr class="band"><td>Wayfarer</td><td>Opus 低思考</td><td>17.8</td><td>11.7</td><td>5.0</td><td>20 秒</td></tr>
+          <tr><td>Wayfarer</td><td>DeepSeek 高思考</td><td>27.8</td><td>18.0</td><td>9.8</td><td>26 秒</td></tr>
+          <tr class="band"><td>Wayfarer</td><td>DeepSeek 低思考</td><td>31.6</td><td>27.1</td><td>4.5</td><td>21 秒</td></tr>
+          <tr><td>互联网史</td><td>Opus 高思考</td><td>75.8</td><td>65.5</td><td>8.9</td><td>56 秒 · 1080p</td></tr>
+          <tr class="band"><td>互联网史</td><td>Opus 低思考</td><td>10.6</td><td>7.9</td><td>1.9</td><td>43 秒</td></tr>
+          <tr><td>互联网史</td><td>DeepSeek 高思考</td><td>55.9</td><td>21.1</td><td>34.8</td><td>62 秒</td></tr>
+          <tr class="band"><td>互联网史</td><td>DeepSeek 低思考</td><td>22.3</td><td>12.6</td><td>9.7</td><td>37 秒</td></tr>
+          <tr><td>可再生能源</td><td>Opus 高思考</td><td>70.9</td><td>62.8</td><td>6.7</td><td>37 秒</td></tr>
+          <tr class="band"><td>可再生能源</td><td>Opus 低思考</td><td>13.3</td><td>6.8</td><td>5.1</td><td>27 秒</td></tr>
+          <tr><td>可再生能源</td><td>DeepSeek 高思考</td><td>57.6</td><td>21.3</td><td>36.3</td><td>42 秒</td></tr>
+          <tr class="band"><td>可再生能源</td><td>DeepSeek 低思考</td><td>25.2</td><td>12.9</td><td>12.3</td><td>35 秒</td></tr>
         </tbody>
       </table>
-      <p class="muted">Wayfarer low 在 13.8 分钟时自己停下来发了选择题，31.6 分钟含补消息之前的空等，请求在飞也被这段抬高。</p>
+      <p class="muted">Wayfarer 的 DeepSeek 低思考，做到大约 14 分钟时自己停下来问下一步。31.6 分钟里含着等人回复的时间，模型回答的数字也被这段抬高了。</p>
 
-      <h3>怎么读这张表</h3>
-      <p>想少等，Opus low 仍然最短，五条都在 11–18 分钟交卷。DeepSeek low 大约 22–32 分钟，手环被一次挂住的命令拉到 70 分钟。DeepSeek high 大约 28–58 分钟，比 Opus high 的 70–88 分钟短，短在请求在飞，不在渲染。</p>
-      <p>成片长度上，DeepSeek high 的几何级数 66 秒、互联网史 62 秒，比同题的 Opus high 更长。两边都交了 mp4。画面没有逐帧看过。</p>
+      <h3>怎么看</h3>
+      <p>想少等的话，Opus 低思考最快，五条都是 11 到 18 分钟交片。DeepSeek 低思考大约 22 到 32 分钟，手环因为一条命令卡住，拖到 70 分钟。DeepSeek 高思考大约 28 到 58 分钟，比 Opus 高思考的 70 到 88 分钟短。短的是模型回答，不是渲染。</p>
+      <p>片子长度上，DeepSeek 高思考的几何级数 66 秒、互联网史 62 秒，比同一题的 Opus 高思考更长。两边都交了成片。画面没有逐帧看过。</p>
     </section>
   </main>
   <script>
@@ -185,10 +185,10 @@
     ];
 
     const labels = [
-      ["opusHigh", "Opus high"],
-      ["opusLow", "Opus low"],
-      ["dsHigh", "DeepSeek high"],
-      ["dsLow", "DeepSeek low"],
+      ["opusHigh", "Opus 高思考"],
+      ["opusLow", "Opus 低思考"],
+      ["dsHigh", "DeepSeek 高思考"],
+      ["dsLow", "DeepSeek 低思考"],
     ];
 
     const nav = document.getElementById("films");
