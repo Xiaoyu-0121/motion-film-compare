@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="utf-8" />
+  <meta name="referrer" content="no-referrer" />
   <title>四组片子对照</title>
   <style>
     :root { color-scheme: dark; }
@@ -104,6 +105,7 @@
         const video = document.createElement("video");
         video.controls = true;
         video.preload = "none";
+        video.referrerPolicy = "no-referrer";
         video.src = film[key];
         fig.append(cap, video);
         grid.append(fig);
