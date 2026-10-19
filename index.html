@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>四组片子对照</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #111; color: #eee; }
+    header { position: sticky; top: 0; z-index: 2; background: #111; padding: 16px 20px 12px; border-bottom: 1px solid #2a2a2a; }
+    h1 { font-size: 16px; font-weight: 600; margin: 0 0 10px; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    button { background: #222; color: #ddd; border: 1px solid #333; border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    button.active { background: #eee; color: #111; border-color: #eee; }
+    .row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+    .hint { color: #888; font-size: 12px; }
+    main { padding: 16px 20px 32px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    figure { margin: 0; }
+    figcaption { font-size: 13px; margin-bottom: 6px; color: #ccc; }
+    video { width: 100%; background: #000; border-radius: 8px; aspect-ratio: 16/9; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">AURA Ring</h1>
+    <nav id="films"></nav>
+    <div class="row">
+      <button id="play" type="button">四条一起播放</button>
+      <button id="pause" type="button">暂停</button>
+      <span class="hint">左上 Opus high，右上 Opus low，左下 DeepSeek high，右下 DeepSeek low</span>
+    </div>
+  </header>
+  <main>
+    <div class="grid" id="grid"></div>
+  </main>
+  <script>
+    const CDN = "https://vidmuse-dev-video.sandcdn.com/v2/static";
+    const films = [
+      {
+        id: "ring",
+        title: "AURA Ring",
+        opusHigh: CDN + "/thread_fca81737-ce54-41a1-9a00-6a2c2e7de940/AURA_Ring_launch_v2.mp4",
+        opusLow: CDN + "/thread_e087b1ea-6370-4f52-8393-41a539bd7dd7/aura_ring_v1.mp4",
+        dsHigh: CDN + "/thread_1fb3a0dd-715c-484c-ab7b-a43aeb35533d/out/aura_ring_v1.mp4",
+        dsLow: CDN + "/thread_f18d1fda-be9f-4177-b9ec-69d3cf4a2160/aura/output/AURA_Ring_web27.mp4",
+      },
+      {
+        id: "math",
+        title: "几何级数",
+        opusHigh: CDN + "/thread_a297068d-a7ff-48eb-8e73-1dc42e1f069d/film/out/film_v1.mp4",
+        opusLow: CDN + "/thread_07d3407a-dc14-4d19-8a85-c16d3690b353/out/infinity_tamed_v1.mp4",
+        dsHigh: CDN + "/thread_1ce49555-eba1-456f-802a-1149b3a6eaae/out/infinity-tamed_v2.mp4",
+        dsLow: CDN + "/thread_7967666f-81dd-40d5-9669-8a559c80a733/renders/geometric-series-2.mp4",
+      },
+      {
+        id: "wayfarer",
+        title: "Wayfarer",
+        opusHigh: CDN + "/thread_6a08c9ca-7010-4f63-8643-32114643fe34/out/wayfarer_v1.mp4",
+        opusLow: CDN + "/thread_81b11760-c453-46a1-8190-8ca69be3c8b2/wayfarer_v1.mp4",
+        dsHigh: CDN + "/thread_c7b7214f-dd4a-48be-9aaa-6f6b7bfa96cd/film/out/Wayfarer-UI-Walkthrough.mp4",
+        dsLow: CDN + "/thread_c122704c-fc4b-48ee-a615-566cef9ce7a2/workspace/film/out/wayfarer_v2.mp4",
+      },
+      {
+        id: "internet",
+        title: "互联网史",
+        opusHigh: CDN + "/thread_588dd2f6-e647-4c79-8fb4-9beb5895dcf5/renders/final/internet-60-beats-v2.mp4",
+        opusLow: CDN + "/thread_97a3c058-3d20-44e6-890c-4cc856d8468a/out/film_v1.mp4",
+        dsHigh: CDN + "/thread_7817dfa5-17c1-45a7-981a-92f60347e44e/workspace/out/InternetIn60Beats_final.mp4",
+        dsLow: CDN + "/thread_188ecea2-bace-4ded-a005-0db29b6f65e9/film/internet_60_beats_v3.mp4",
+      },
+      {
+        id: "energy",
+        title: "可再生能源",
+        opusHigh: CDN + "/thread_d5dc631b-9344-46cc-bc30-6c3f5c0d69b6/output/renewables_v1.mp4",
+        opusLow: CDN + "/thread_70a69196-521a-45e2-ac4f-e52ec4466266/film_v2.mp4",
+        dsHigh: CDN + "/thread_fdb8ef0d-b28f-49b9-a123-752e5f90fced/build/renewables_film_v1.mp4",
+        dsLow: CDN + "/thread_3a11f53e-08a7-40c1-bd39-e691a5c2459e/renders/renewable_energy_final.mp4",
+      },
+    ];
+
+    const labels = [
+      ["opusHigh", "Opus high"],
+      ["opusLow", "Opus low"],
+      ["dsHigh", "DeepSeek high"],
+      ["dsLow", "DeepSeek low"],
+    ];
+
+    const nav = document.getElementById("films");
+    const grid = document.getElementById("grid");
+    const title = document.getElementById("title");
+
+    function show(film) {
+      title.textContent = film.title;
+      history.replaceState(null, "", "#" + film.id);
+      for (const btn of nav.querySelectorAll("button")) {
+        btn.classList.toggle("active", btn.dataset.id === film.id);
+      }
+      grid.innerHTML = "";
+      for (const [key, label] of labels) {
+        const fig = document.createElement("figure");
+        const cap = document.createElement("figcaption");
+        cap.textContent = label;
+        const video = document.createElement("video");
+        video.controls = true;
+        video.preload = "none";
+        video.src = film[key];
+        fig.append(cap, video);
+        grid.append(fig);
+      }
+    }
+
+    films.forEach((film) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = film.title;
+      btn.dataset.id = film.id;
+      btn.addEventListener("click", () => show(film));
+      nav.append(btn);
+    });
+
+    document.getElementById("play").addEventListener("click", async () => {
+      for (const video of grid.querySelectorAll("video")) {
+        video.currentTime = 0;
+        try { await video.play(); } catch (e) {}
+      }
+    });
+    document.getElementById("pause").addEventListener("click", () => {
+      for (const video of grid.querySelectorAll("video")) video.pause();
+    });
+
+    const initial = films.find((film) => film.id === location.hash.slice(1)) || films[0];
+    show(initial);
+  </script>
+</body>
+</html>
